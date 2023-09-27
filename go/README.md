@@ -16,3 +16,5 @@
 
     bsp = sdktrace.NewBatchSpanProcessor(traceExporter)
 ```
+
+todo: 添加endpoint和token

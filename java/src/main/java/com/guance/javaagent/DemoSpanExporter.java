@@ -70,7 +70,7 @@ public class DemoSpanExporter implements SpanExporter {
   }
   @Override
   public CompletableResultCode export(Collection<SpanData> spans) {
-    System.out.println("span exporter");
+    //System.out.println("span exporter");
     StringBuilder sb = new StringBuilder();
 
     for (SpanData span : spans) {

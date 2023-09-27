@@ -13,7 +13,7 @@ var (
 
 // Exporter exports trace data in the OTLP wire format.
 type Exporter struct {
-	client *client
+	client *Client
 
 	mu      sync.RWMutex
 	started bool
@@ -22,8 +22,8 @@ type Exporter struct {
 	stopOnce  sync.Once
 }
 
-func NewExporter(ctx context.Context) *Exporter {
-	exp := &Exporter{client: NewClient()}
+func NewExporter(ctx context.Context, endpoint, token string) *Exporter {
+	exp := &Exporter{client: NewClient(endpoint, token)}
 	exp.Start(ctx)
 	return exp
 
@@ -32,7 +32,7 @@ func NewExporter(ctx context.Context) *Exporter {
 // ExportSpans exports a batch of spans.
 func (e *Exporter) ExportSpans(ctx context.Context, ss []tracesdk.ReadOnlySpan) error {
 	buf := ToPoint(ss)
-	err := e.client.UploadTraces(ctx, buf)
+	err := e.client.UploadTraces(ctx, buf, len(ss))
 	if err != nil {
 		//return internal.WrapTracesError(err)
 	}

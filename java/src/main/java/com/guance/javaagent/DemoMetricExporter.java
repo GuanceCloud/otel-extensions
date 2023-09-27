@@ -45,7 +45,7 @@ public class DemoMetricExporter implements MetricExporter {
 
     @Override
     public CompletableResultCode export(Collection<MetricData> collection) {
-        System.out.println("span exporter");
+        //System.out.println("span exporter");
         StringBuilder sb = new StringBuilder();
         for (MetricData metricData : collection) {
             sb.append(convertToLineProtocol(metricData));

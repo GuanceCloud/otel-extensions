@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+var (
+	TRACE_CATEGORY  = "/v1/write/tracing"
+	METRIC_CATEGORY = "/v1/write/metric"
+)
+
 var ourTransport = &http.Transport{
 	Proxy: http.ProxyFromEnvironment,
 	DialContext: (&net.Dialer{
@@ -21,7 +26,7 @@ var ourTransport = &http.Transport{
 	ExpectContinueTimeout: 1 * time.Second,
 }
 
-type client struct {
+type Client struct {
 	name     string
 	client   *http.Client
 	stopCh   chan struct{}
@@ -29,7 +34,7 @@ type client struct {
 }
 
 // Start does nothing in a HTTP client.
-func (d *client) Start(ctx context.Context) error {
+func (d *Client) Start(ctx context.Context) error {
 	// nothing to do
 	select {
 	case <-ctx.Done():
@@ -40,7 +45,7 @@ func (d *client) Start(ctx context.Context) error {
 }
 
 // Stop shuts down the client and interrupt any in-flight request.
-func (d *client) Stop(ctx context.Context) error {
+func (d *Client) Stop(ctx context.Context) error {
 	d.stopOnce.Do(func() {
 		close(d.stopCh)
 	})
@@ -52,7 +57,7 @@ func (d *client) Stop(ctx context.Context) error {
 	return nil
 }
 
-func NewClient() *client {
+func NewClient(endpoint string, token string) *Client {
 	//	cfg := otlpconfig.NewHTTPConfig(asHTTPOptions(opts)...)
 
 	httpClient := &http.Client{
@@ -66,13 +71,18 @@ func NewClient() *client {
 	//}
 
 	stopCh := make(chan struct{})
-	return &client{
+	return &Client{
 		name:   "traces",
 		stopCh: stopCh,
 		client: httpClient,
 	}
 }
 
-func (d *client) UploadTraces(ctx context.Context, lines []byte) error {
+func (d *Client) UploadTraces(ctx context.Context, lines []byte, count int) error {
+
+	return nil
+}
+ 
+func (d *Client) UploadMetric(ctx context.Context, lines []byte) error {
 	return nil
 }
